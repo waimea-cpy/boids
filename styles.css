@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    background-color: #222;
+    color: #999;
+    font-family: system-ui, sans-serif;
+}
+
+#canvas {
+    border: 3px solid #000;
+    border-radius: 0.5rem;
+    background-color: #036;
+}
+
+#controls {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+
+    label {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+}
