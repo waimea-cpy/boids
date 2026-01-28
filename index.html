@@ -7,39 +7,43 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <heading id="intro">
+        <h1>Boids</h1>
 
-    <div id="controls">
-        <label>
-            Range
-            <input id="range" type="range" min="0" max="30" value="10">
-        </label>
+        <p>A classic algorithm that demonstrates emergent behaviour. A number of 'boids'
+            follow very simple rules, reacting to their close neighbours. But this results
+            in group behaviour similar to birds flocking.</p>
+    </heading>
 
-        <label>
-            Speed
-            <input id="speed" type="range" min="0" max="30" value="5">
-        </label>
+    <section id="notes">
+        <h4>Notes:</h4>
 
-        <label>
-            Separation
-            <input id="separ" type="range" min="0" max="20" value="5">
-        </label>
+        <ul>
+            <li><strong>Number</strong> - The number of boids</li>
+            <li><strong>Range</strong> - The radius of a boid's 'neighbourhood'</li>
+            <li><strong>Speed</strong> - Overall speed of boids</li>
+            <li><strong>Separation</strong> - Urge to avoid neighbours</li>
+            <li><strong>Coherence</strong> - Urge to stay close to neighbours</li>
+            <li><strong>Alignment</strong> - Urge to align with neighbours</li>
+            <li><strong>Highlight</strong> - Visualise neighbourhood of a boid</li>
+        </ul>
+    </section>
 
-        <label>
-            Coherence
-            <input id="coher" type="range" min="0" max="20" value="5">
-        </label>
+    <section id="boids">
+        <canvas id="canvas"></canvas>
+    </section>
 
-        <label>
-            Alignment
-            <input id="align" type="range" min="0" max="20" value="5">
-        </label>
-
-        <label>
-            Highlight
-            <input type="checkbox" id="high" checked>
-        </label>
-    </div>
+    <section id="controls">
+        <h4>Boids:</h4>
+        <label>Number     <input id="number" type="range" min="5" max="1000" step="5" value="400"></label>
+        <label>Range      <input id="range"  type="range" min="0" max="30"   value="10"></label>
+        <label>Speed      <input id="speed"  type="range" min="0" max="30"   value="5"></label>
+        <h4>Behaviour:</h4>
+        <label>Separation <input id="separ"  type="range" min="0" max="20"   value="5"></label>
+        <label>Coherence  <input id="coher"  type="range" min="0" max="20"   value="5"></label>
+        <label>Alignment  <input id="align"  type="range" min="0" max="20"   value="5"></label>
+        <label>Highlight  <input id="high"   type="checkbox" checked></label>
+    </section>
 
     <script src="boids.js"></script>
 </body>

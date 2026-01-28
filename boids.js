@@ -1,14 +1,15 @@
-const rangeSlider = document.getElementById("range")
-const speedSlider = document.getElementById("speed")
-const coherSlider = document.getElementById("coher")
-const separSlider = document.getElementById("separ")
-const alignSlider = document.getElementById("align")
-const highCheck   = document.getElementById("high")
+const numberSlider = document.getElementById("number")
+const rangeSlider  = document.getElementById("range")
+const speedSlider  = document.getElementById("speed")
+const coherSlider  = document.getElementById("coher")
+const separSlider  = document.getElementById("separ")
+const alignSlider  = document.getElementById("align")
+const highCheck    = document.getElementById("high")
 
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext('2d')
 
-const displayWidth  = window.innerWidth  * 0.98
+const displayWidth  = window.innerWidth  * 0.65
 const displayHeight = window.innerHeight * 0.9
 const dpr = window.devicePixelRatio || 1
 canvas.width  = displayWidth  * dpr
@@ -170,16 +171,22 @@ let alignment = 0
 
 let high = false
 
-for (let i = 0; i < 250; i++) {
-    boids[i] = new Boid(
-        width * Math.random(),
-        height * Math.random(),
-        Math.random() * 0.2,
-        2 * Math.PI * Math.random()
-    )
+const createBoids = () => {
+    boids.length = 0
+
+    const number = numberSlider.value
+
+    for (let i = 0; i < number; i++) {
+        boids[i] = new Boid(
+            width * Math.random(),
+            height * Math.random(),
+            Math.random() * 0.2,
+            2 * Math.PI * Math.random()
+        )
+    }
 }
 
-function animate() {
+const animate = () => {
     range      = rangeSlider.value * 10
     speed      = speedSlider.value / 3.0
     coherence  = coherSlider.value / 1.0
@@ -189,14 +196,23 @@ function animate() {
 
     ctx.clearRect(0, 0, width, height)
 
+    ctx.fillStyle = "#fff8"
+    ctx.font = "16px system-ui, sans-serif"
+    ctx.textAlign = "right"
+    ctx.textBaseline = "bottom"
+    ctx.fillText(`Boids: ${boids.length}`, width - 10, height - 10)
+
     boids.forEach(boid => {
         boid.update()
         boid.draw()
     })
 
-    if (high) boids[0].highlight()
+    if (high && boids[0]) boids[0].highlight()
 
     requestAnimationFrame(animate)
 }
 
+
+numberSlider.addEventListener('change', createBoids)
+createBoids()
 animate()
