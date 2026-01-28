@@ -1,4 +1,5 @@
 const rangeSlider = document.getElementById("range")
+const speedSlider = document.getElementById("speed")
 const coherSlider = document.getElementById("coher")
 const separSlider = document.getElementById("separ")
 const alignSlider = document.getElementById("align")
@@ -104,8 +105,8 @@ class Boid {
             this.a += this.angleDiff(localCohA) * coherence / 100
         }
 
-        this.x += this.v * Math.cos(this.a)
-        this.y += this.v * Math.sin(this.a)
+        this.x += (speed + this.v) * Math.cos(this.a)
+        this.y += (speed + this.v) * Math.sin(this.a)
 
         this.x = (this.x + width) % width
         this.y = (this.y + height) % height
@@ -162,6 +163,7 @@ class Boid {
 const boids = []
 
 let range = 0
+let speed = 0
 let coherence = 0
 let separation = 0
 let alignment = 0
@@ -172,16 +174,17 @@ for (let i = 0; i < 250; i++) {
     boids[i] = new Boid(
         width * Math.random(),
         height * Math.random(),
-        2 + Math.random() * 0.1,
+        Math.random() * 0.2,
         2 * Math.PI * Math.random()
     )
 }
 
 function animate() {
-    range      = rangeSlider.value * 25
-    coherence  = coherSlider.value
-    separation = separSlider.value
-    alignment  = alignSlider.value
+    range      = rangeSlider.value * 10
+    speed      = speedSlider.value / 3.0
+    coherence  = coherSlider.value / 1.0
+    separation = separSlider.value / 1.0
+    alignment  = alignSlider.value / 1.0
     high       = highCheck.checked
 
     ctx.clearRect(0, 0, width, height)
