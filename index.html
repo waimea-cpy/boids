@@ -19,13 +19,14 @@
         <h4>Notes:</h4>
 
         <ul>
-            <li><strong>Number</strong> - The number of boids</li>
-            <li><strong>Range</strong> - The radius of a boid's 'neighbourhood'</li>
-            <li><strong>Speed</strong> - Overall speed of boids</li>
-            <li><strong>Separation</strong> - Urge to avoid neighbours</li>
+            <li><strong>Boid Count</strong> - Total number of boids</li>
+            <li><strong>Neighbourhood</strong> - Radius of a boid's 'neighbourhood'</li>
+            <li><strong>Speed</strong> - Overall speed of all boids</li>
+            <li><strong>Separation</strong> - Urge to avoid crowding neighbours</li>
             <li><strong>Coherence</strong> - Urge to stay close to neighbours</li>
-            <li><strong>Alignment</strong> - Urge to align with neighbours</li>
-            <li><strong>Highlight</strong> - Visualise neighbourhood of a boid</li>
+            <li><strong>Alignment</strong> - Urge to head the same way as neighbours</li>
+            <li><strong>Visualise</strong> - See neighbourhood of a boid and fear</li>
+            <li>You can <strong>click</strong> to scare boids away!</li>
         </ul>
     </section>
 
@@ -35,14 +36,14 @@
 
     <section id="controls">
         <h4>Boids:</h4>
-        <label>Number     <input id="number" type="range" min="5" max="1000" step="5" value="400"></label>
-        <label>Range      <input id="range"  type="range" min="0" max="30"   value="10"></label>
-        <label>Speed      <input id="speed"  type="range" min="0" max="30"   value="5"></label>
+        <label>Boid Count    <input id="number" type="range" min="5" max="1000" step="5" value="400"></label>
+        <label>Neighbourhood <input id="range"  type="range" min="0" max="30"   value="10"></label>
+        <label>Boid Speed    <input id="speed"  type="range" min="0" max="30"   value="5"></label>
         <h4>Behaviour:</h4>
-        <label>Separation <input id="separ"  type="range" min="0" max="20"   value="5"></label>
-        <label>Coherence  <input id="coher"  type="range" min="0" max="20"   value="5"></label>
-        <label>Alignment  <input id="align"  type="range" min="0" max="20"   value="5"></label>
-        <label>Highlight  <input id="high"   type="checkbox" checked></label>
+        <label>Separation    <input id="separ"  type="range" min="0" max="20"   value="5"></label>
+        <label>Coherence     <input id="coher"  type="range" min="0" max="20"   value="5"></label>
+        <label>Alignment     <input id="align"  type="range" min="0" max="20"   value="5"></label>
+        <label>Visualise     <input id="high"   type="checkbox"></label>
     </section>
 
     <script src="boids.js"></script>

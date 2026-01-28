@@ -1,3 +1,16 @@
+const BOID_COL      = "#ccc"
+const BOID_COL_HIGH = "#f07"
+const BOID_COL_NEAR = "#08f"
+
+const TEXT_COL      = "#fff8"
+const FEAR_COL      = "#9f01"
+
+const BOID_SIZE = 8
+const SPEED_VARY = 0.2
+
+const FEAR_RADIUS = 200
+const FEAR_DECAY = 0.95
+
 const numberSlider = document.getElementById("number")
 const rangeSlider  = document.getElementById("range")
 const speedSlider  = document.getElementById("speed")
@@ -9,17 +22,7 @@ const highCheck    = document.getElementById("high")
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext('2d')
 
-const displayWidth  = window.innerWidth  * 0.65
-const displayHeight = window.innerHeight * 0.9
-const dpr = window.devicePixelRatio || 1
-canvas.width  = displayWidth  * dpr
-canvas.height = displayHeight * dpr
-canvas.style.width  = displayWidth  + 'px'
-canvas.style.height = displayHeight + 'px'
-ctx.scale(dpr, dpr)
-
-const width  = displayWidth
-const height = displayHeight
+let width, height
 
 class Boid {
     constructor(x, y, v, a) {
@@ -106,6 +109,17 @@ class Boid {
             this.a += this.angleDiff(localCohA) * coherence / 100
         }
 
+        // Fear response
+        if (fearPoint && fearStrength > 0.01) {
+            const dist = this.distanceTo(fearPoint)
+            if (dist < FEAR_RADIUS) {
+                const { dx, dy } = this.delta(fearPoint)
+                const fleeAngle = Math.atan2(dy, dx)
+                const fearForce = fearStrength * (1 - dist / FEAR_RADIUS)
+                this.a += this.angleDiff(fleeAngle) * fearForce * 0.5
+            }
+        }
+
         this.x += (speed + this.v) * Math.cos(this.a)
         this.y += (speed + this.v) * Math.sin(this.a)
 
@@ -113,7 +127,7 @@ class Boid {
         this.y = (this.y + height) % height
     }
 
-    draw(color = "#ccc") {
+    draw(color = BOID_COL) {
         ctx.strokeStyle = color
         ctx.setLineDash([])
 
@@ -122,9 +136,9 @@ class Boid {
         ctx.rotate(this.a)
 
         ctx.beginPath()
-        ctx.moveTo(8, 0)
-        ctx.lineTo(-8, -5)
-        ctx.lineTo(-8, 5)
+        ctx.moveTo(BOID_SIZE, 0)
+        ctx.lineTo(-BOID_SIZE, -(BOID_SIZE / 2))
+        ctx.lineTo(-BOID_SIZE,  (BOID_SIZE / 2))
         ctx.closePath()
         ctx.stroke()
 
@@ -132,9 +146,9 @@ class Boid {
     }
 
     highlight() {
-        this.draw("#f008")
+        this.draw(BOID_COL_HIGH)
 
-        ctx.strokeStyle = "#ff08"
+        ctx.strokeStyle = BOID_COL_NEAR
         ctx.setLineDash([5, 5])
 
         ctx.beginPath()
@@ -154,7 +168,7 @@ class Boid {
         ctx.stroke()
 
         this.neighbours().forEach(boid => {
-            boid.draw("#ff08")
+            boid.draw(BOID_COL_NEAR)
         })
 
         ctx.setLineDash([])
@@ -171,6 +185,9 @@ let alignment = 0
 
 let high = false
 
+let fearPoint = null
+let fearStrength = 0
+
 const createBoids = () => {
     boids.length = 0
 
@@ -180,7 +197,7 @@ const createBoids = () => {
         boids[i] = new Boid(
             width * Math.random(),
             height * Math.random(),
-            Math.random() * 0.2,
+            Math.random() * SPEED_VARY,
             2 * Math.PI * Math.random()
         )
     }
@@ -196,23 +213,83 @@ const animate = () => {
 
     ctx.clearRect(0, 0, width, height)
 
-    ctx.fillStyle = "#fff8"
+    ctx.fillStyle = TEXT_COL
     ctx.font = "16px system-ui, sans-serif"
     ctx.textAlign = "right"
     ctx.textBaseline = "bottom"
     ctx.fillText(`Boids: ${boids.length}`, width - 10, height - 10)
+
+    if (high && fearStrength > 0.01) {
+        ctx.fillStyle = FEAR_COL
+        ctx.beginPath()
+        ctx.arc(
+            fearPoint.x, fearPoint.y,
+            FEAR_RADIUS * fearStrength,
+            0, 2 * Math.PI)
+        ctx.fill()
+    }
 
     boids.forEach(boid => {
         boid.update()
         boid.draw()
     })
 
-    if (high && boids[0]) boids[0].highlight()
+    if (high && boids[0]) {
+        boids[0].highlight()
+    }
+
+    if (fearStrength > 0.01 && !isDragging) {
+        fearStrength *= FEAR_DECAY
+    }
 
     requestAnimationFrame(animate)
 }
 
+let isDragging = false
+
+const placeFearPoint = (e) => {
+    const rect = canvas.getBoundingClientRect()
+    fearPoint.x = e.clientX - rect.left
+    fearPoint.y = e.clientY - rect.top
+    fearStrength = 1.0
+}
+
+canvas.addEventListener('mousedown', (e) => {
+    isDragging = true
+    fearPoint = new Boid()
+    placeFearPoint(e)
+})
+
+canvas.addEventListener('mousemove', (e) => {
+    if (isDragging && fearPoint) {
+        placeFearPoint(e)
+    }
+})
+
+canvas.addEventListener('mouseup', () => {
+    isDragging = false
+})
+
+canvas.addEventListener('mouseleave', () => {
+    isDragging = false
+})
 
 numberSlider.addEventListener('change', createBoids)
-createBoids()
-animate()
+
+window.addEventListener('load', () => {
+    const boidsSection = document.getElementById("boids")
+    const displayWidth  = boidsSection.clientWidth
+    const displayHeight = boidsSection.clientHeight
+    const dpr = window.devicePixelRatio || 1
+    canvas.width  = displayWidth  * dpr
+    canvas.height = displayHeight * dpr
+    canvas.style.width  = displayWidth  + 'px'
+    canvas.style.height = displayHeight + 'px'
+    ctx.scale(dpr, dpr)
+
+    width  = displayWidth
+    height = displayHeight
+
+    createBoids()
+    animate()
+})

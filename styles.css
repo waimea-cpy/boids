@@ -12,14 +12,14 @@ body {
     padding: 2rem;
     display: grid;
     gap: 1rem 2rem;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 24rem;
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
         "boids intro"
         "boids controls"
         "boids notes";
 
-    background-color: #222;
+    background-color: #111;
     color: #999;
     font-family: system-ui, sans-serif;
 
@@ -42,10 +42,17 @@ body {
     }
 }
 
-#canvas {
-    border: 3px solid #000;
-    border-radius: 0.5rem;
-    background-color: #036;
+#boids {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+
+    #canvas {
+        border: 3px solid #000;
+        border-radius: 0.5rem;
+        background-color: #012;
+    }
 }
 
 #controls {
@@ -57,7 +64,7 @@ body {
     justify-content: center;
 
     h4 {
-        margin: 1.5rem 0 0.5rem;
+        margin: 1rem 0 0.25rem;
 
         &:first-of-type {
             margin-top: 0;
@@ -71,5 +78,9 @@ body {
         gap: 0.5rem;
         align-items: center;
         justify-content: flex-end;
+
+        input[type="checkbox"] {
+            margin-right: 9rem;
+        }
     }
 }
