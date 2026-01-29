@@ -8,8 +8,8 @@ const FEAR_COL      = "#9f01"
 const BOID_SIZE = 8
 const SPEED_VARY = 0.2
 
-const FEAR_RADIUS = 200
-const FEAR_DECAY = 0.95
+const FEAR_RADIUS = 150
+const FEAR_DECAY = 0.90
 
 const numberSlider = document.getElementById("number")
 const rangeSlider  = document.getElementById("range")
